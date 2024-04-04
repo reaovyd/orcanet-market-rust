@@ -50,10 +50,10 @@ fn test_get_connected_peers() {
 }
 
 // Each peer has their own swarm and port they listen to so each peer has exactly ONE listener
-// TODO(?): eventually allow peers to use more than one listener 
+// TODO(?): eventually allow peers to use more than one listener
 // Further TODO(?): test the case of expired listeners
 #[test]
-fn test_get_all_listeners(){
+fn test_get_all_listeners() {
     let peer1 = spawn_bridge(
         Config::builder()
             .with_listener(multiaddr!(Ip4([127, 0, 0, 1]), Tcp(1235u16)))
@@ -75,7 +75,7 @@ fn test_get_all_listeners(){
 
 // Returns a bool if there's an established conenction to a peer
 #[test]
-fn test_is_connected_to(){
+fn test_is_connected_to() {
     let peer1 = spawn_bridge(
         Config::builder()
             .with_listener(multiaddr!(Ip4([127, 0, 0, 1]), Tcp(1236u16)))

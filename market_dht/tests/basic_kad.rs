@@ -1,9 +1,8 @@
-use std::{thread, time::Duration, borrow::Cow};
+use std::{borrow::Cow, thread, time::Duration};
 
-use market_dht::{config::Config, multiaddr, net::spawn_bridge, ResponseData, KadResponseData};
+use market_dht::{config::Config, multiaddr, net::spawn_bridge, KadResponseData, ResponseData};
 use pretty_assertions::{self, assert_eq};
 use tokio::runtime::Runtime;
-
 
 // Test to find LOCAL peers within a Kad network
 #[test]
@@ -22,12 +21,12 @@ fn test_get_closest_local_peers() {
             .with_thread_name("peer2".to_owned())
             .with_boot_nodes(
                 vec![("/ip4/127.0.0.1/tcp/1236".to_owned(), peer1.id().to_string())]
-                .try_into()
-                .unwrap(),
-                )
-                .build(),
-        )
-        .unwrap();
+                    .try_into()
+                    .unwrap(),
+            )
+            .build(),
+    )
+    .unwrap();
 
     let _peer3 = spawn_bridge(
         Config::builder()
@@ -35,12 +34,12 @@ fn test_get_closest_local_peers() {
             .with_thread_name("peer3".to_owned())
             .with_boot_nodes(
                 vec![("/ip4/127.0.0.1/tcp/1236".to_owned(), peer1.id().to_string())]
-                .try_into()
-                .unwrap(),
-                )
-                .build(),
-        )
-        .unwrap();
+                    .try_into()
+                    .unwrap(),
+            )
+            .build(),
+    )
+    .unwrap();
 
     let _peer4 = spawn_bridge(
         Config::builder()
@@ -48,12 +47,12 @@ fn test_get_closest_local_peers() {
             .with_thread_name("peer4".to_owned())
             .with_boot_nodes(
                 vec![("/ip4/127.0.0.1/tcp/1236".to_owned(), peer1.id().to_string())]
-                .try_into()
-                .unwrap(),
-                )
-                .build(),
-        )
-        .unwrap();
+                    .try_into()
+                    .unwrap(),
+            )
+            .build(),
+    )
+    .unwrap();
 
     thread::sleep(Duration::from_secs(1));
     Runtime::new().unwrap().block_on(async {
@@ -61,7 +60,9 @@ fn test_get_closest_local_peers() {
             .get_closest_local_peers(Cow::Owned(_peer3.id().to_bytes()))
             .await
             .unwrap();
-        if let ResponseData::KadResponse(KadResponseData::ClosestLocalPeers { peers }) = kad_response {
+        if let ResponseData::KadResponse(KadResponseData::ClosestLocalPeers { peers }) =
+            kad_response
+        {
             assert_eq!(3, peers.len());
         } else {
             panic!("Didn't get the correct response!")
@@ -71,7 +72,7 @@ fn test_get_closest_local_peers() {
 
 // Test to find closest peers within a Kad network
 #[test]
-fn test_get_closest_peers(){
+fn test_get_closest_peers() {
     let peer1 = spawn_bridge(
         Config::builder()
             .with_listener(multiaddr!(Ip4([127, 0, 0, 1]), Tcp(1240u16)))
@@ -86,12 +87,12 @@ fn test_get_closest_peers(){
             .with_thread_name("peer2".to_owned())
             .with_boot_nodes(
                 vec![("/ip4/127.0.0.1/tcp/1240".to_owned(), peer1.id().to_string())]
-                .try_into()
-                .unwrap(),
-                )
-                .build(),
-        )
-        .unwrap();
+                    .try_into()
+                    .unwrap(),
+            )
+            .build(),
+    )
+    .unwrap();
 
     let _peer3 = spawn_bridge(
         Config::builder()
@@ -99,12 +100,12 @@ fn test_get_closest_peers(){
             .with_thread_name("peer3".to_owned())
             .with_boot_nodes(
                 vec![("/ip4/127.0.0.1/tcp/1240".to_owned(), peer1.id().to_string())]
-                .try_into()
-                .unwrap(),
-                )
-                .build(),
-        )
-        .unwrap();
+                    .try_into()
+                    .unwrap(),
+            )
+            .build(),
+    )
+    .unwrap();
 
     let _peer4 = spawn_bridge(
         Config::builder()
@@ -112,12 +113,12 @@ fn test_get_closest_peers(){
             .with_thread_name("peer4".to_owned())
             .with_boot_nodes(
                 vec![("/ip4/127.0.0.1/tcp/1240".to_owned(), peer1.id().to_string())]
-                .try_into()
-                .unwrap(),
-                )
-                .build(),
-        )
-        .unwrap();
+                    .try_into()
+                    .unwrap(),
+            )
+            .build(),
+    )
+    .unwrap();
 
     thread::sleep(Duration::from_secs(1));
     Runtime::new().unwrap().block_on(async {
@@ -125,7 +126,9 @@ fn test_get_closest_peers(){
             .get_closest_peers(Cow::Owned(_peer4.id().to_bytes()))
             .await
             .unwrap();
-        if let ResponseData::KadResponse(KadResponseData::ClosestPeers { key: _ , peers }) = kad_response {
+        if let ResponseData::KadResponse(KadResponseData::ClosestPeers { key: _, peers }) =
+            kad_response
+        {
             assert_eq!(3, peers.len());
         } else {
             panic!("Didn't get the correct response!")
