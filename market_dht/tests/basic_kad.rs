@@ -69,6 +69,7 @@ fn test_get_closest_local_peers() {
     });
 }
 
+// Test to find closest peers within a Kad network
 #[test]
 fn test_get_closest_peers(){
     let peer1 = spawn_bridge(
