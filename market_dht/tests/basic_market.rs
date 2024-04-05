@@ -108,3 +108,28 @@ fn test_check_holders() {
         }
     });
 }
+
+// Test a file deletion after some time frame
+#[test]
+fn test_file_deletion() {
+    let peer1 = spawn_bridge(
+        Config::builder()
+            .with_listener(multiaddr!(Ip4([127, 0, 0, 1]), Tcp(1241u16)))
+            .with_thread_name("peer1".to_owned())
+            .build(),
+    )
+    .unwrap();
+
+    let peer2 = spawn_bridge(
+        Config::builder()
+            .with_listener(multiaddr!(Ip4([127, 0, 0, 1]), Tcp(1242u16)))
+            .with_thread_name("peer2".to_owned())
+            .with_boot_nodes(
+                vec![("/ip4/127.0.0.1/tcp/1241".to_owned(), peer1.id().to_string())]
+                    .try_into()
+                    .unwrap(),
+            )
+            .build(),
+    )
+    .unwrap();
+}
